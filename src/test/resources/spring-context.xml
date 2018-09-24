@@ -1,0 +1,66 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context-4.2.xsd
+                           http://www.springframework.org/schema/cache
+                           http://www.springframework.org/schema/cache/spring-cache-4.2.xsd
+                           http://www.springframework.org/schema/jee 
+                           http://www.springframework.org/schema/jee/spring-jee-4.2.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+
+    <context:annotation-config/>
+
+    <context:component-scan base-package="pe.com.entel.sincrespago"/>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          id="corePlaceHolder">
+        <property name="ignoreUnresolvablePlaceholders" value="false"/>
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+        <property name="fileEncoding" value="UTF-8" />
+        <property name="searchSystemEnvironment" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:jdbc.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="dataSourcePias" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
+        <property name="URL" value="${jdbc.pias.url}"/>
+        <property name="user" value="${jdbc.pias.username}"/>
+        <property name="password" value="${jdbc.pias.password}"/>
+    </bean>
+     <!--<bean id="dataSourcePias" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.pias.driverClassName}"/>
+        <property name="url" value="${jdbc.pias.url}"/>
+        <property name="username" value="${jdbc.pias.username}"/>
+        <property name="password" value="${jdbc.pias.password}"/>
+        <property name="initialSize" value="${jdbc.pias.initialSize}"/>
+        <property name="maxActive" value="${jdbc.pias.maxActive}"/>
+        <property name="minIdle" value="${jdbc.pias.minIdle}"/>
+     <property name="accessToUnderlyingConnectionAllowed" value="true" />
+    </bean>-->
+
+    <bean id="dataSourcePbscs" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
+        <property name="URL" value="${jdbc.pbscs.url}"/>
+        <property name="user" value="${jdbc.pbscs.username}"/>
+        <property name="password" value="${jdbc.pbscs.password}"/>
+    </bean>
+
+    <!--<bean id="dataSourcePbscs" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.pbscs.driverClassName}"/>
+        <property name="url" value="${jdbc.pbscs.url}"/>
+        <property name="username" value="${jdbc.pbscs.username}"/>
+        <property name="password" value="${jdbc.pbscs.password}"/>
+        <property name="initialSize" value="${jdbc.pbscs.initialSize}"/>
+        <property name="maxActive" value="${jdbc.pbscs.maxActive}"/>
+        <property name="minIdle" value="${jdbc.pbscs.minIdle}"/>
+    </bean>-->
+</beans>

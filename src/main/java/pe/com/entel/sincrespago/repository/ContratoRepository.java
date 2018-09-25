@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
-import pe.com.entel.sincrespago.domain.Contrato;
+import pe.com.entel.sincrespago.domain.ContratoBscs;
 import pe.com.entel.sincrespago.exception.RepositoryException;
 import pe.com.entel.sincrespago.mapper.ContratoMapper;
 import pe.com.entel.sincrespago.util.Configuration;
@@ -35,7 +35,7 @@ public class ContratoRepository {
     @Autowired
     private Configuration configuration;
 
-    public List<Contrato> obtenerContrato(List<String> simnumberList) throws RepositoryException {
+    public List<ContratoBscs> obtenerContrato(List<String> simnumberList) throws RepositoryException {
 
 
         SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSourcePbscs);
@@ -44,7 +44,7 @@ public class ContratoRepository {
         jdbcCall.withProcedureName(configuration.getCustcodebysimSp());
 
         jdbcCall.addDeclaredParameter(new SqlParameter("AT_SIMNUMBER_OVEP", Types.ARRAY, "APIBSCS.TT_SIMNUMBER_OVEP"));
-        jdbcCall.addDeclaredParameter(new SqlOutParameter("AT_CONTRATO_OVEP",Types.ARRAY, "APIBSCS.TT_CONTRATO_OVEP", new SqlReturnStructArray<Contrato>(new ContratoMapper())));
+        jdbcCall.addDeclaredParameter(new SqlOutParameter("AT_CONTRATO_OVEP",Types.ARRAY, "APIBSCS.TT_CONTRATO_OVEP", new SqlReturnStructArray<ContratoBscs>(new ContratoMapper())));
         jdbcCall.addDeclaredParameter(new SqlOutParameter("AVCH_MENSAJE", OracleTypes.VARCHAR));
 
         String[] simNumbersArray = simnumberList.toArray(new String[simnumberList.size()]);
@@ -63,11 +63,11 @@ public class ContratoRepository {
 
         Object[] objects= (Object[])result.get("AT_CONTRATO_OVEP");
         logger.debug("Tamaño AT_CONTRATO_OVEP: " + objects.length);
-        List<Contrato> contratoList = new ArrayList<Contrato>();
+        List<ContratoBscs> contratoBscsList = new ArrayList<ContratoBscs>();
         for(Object object : objects){
-            Contrato contrato = (Contrato)object;
-            contratoList.add(contrato);
+            ContratoBscs contratoBscs = (ContratoBscs)object;
+            contratoBscsList.add(contratoBscs);
         }
-        return contratoList;
+        return contratoBscsList;
     }
 }

@@ -21,23 +21,21 @@ public class ItemOrdenVepMapper implements StructMapper<ItemOrdenVep> {
     public STRUCT toStruct(ItemOrdenVep source, Connection conn, String typeName) throws SQLException {
         StructDescriptor descriptor = new StructDescriptor(typeName, conn);
         Object[] values = new Object[5];
-        values[0] = source.getOrden_id();
-        values[1] = source.getCliente_id();
-        values[2] = source.getItem_id();
-        values[3] = source.getItemdev_id();
-        values[4] = source.getSimnumber();
+        values[0] = source.getOrdenId();
+        values[1] = source.getClienteCrmId();
+        values[2] = source.getSiteId();
+        values[3] = source.getSimNumber();
         return new STRUCT(descriptor, conn, values);
     }
 
     public ItemOrdenVep fromStruct(STRUCT struct) throws SQLException {
         ItemOrdenVep dest = new ItemOrdenVep();
         Object[] attributes = struct.getAttributes();
-        logger.debug("ItemOrdenVepMapper.fromStruct : " + Arrays.toString(attributes));
-        dest.setOrden_id(Long.valueOf(((Number) attributes[0]).longValue()));
-        dest.setCliente_id(Long.valueOf(((Number) attributes[1]).longValue()));
-        dest.setItem_id(Long.valueOf(((Number) attributes[2]).longValue()));
-        dest.setItemdev_id(Long.valueOf(((Number) attributes[3]).longValue()));
-        dest.setSimnumber(String.valueOf(attributes[4]));
+        //logger.debug("ItemOrdenVepMapper.fromStruct : " + Arrays.toString(attributes));
+        dest.setOrdenId(Long.valueOf(((Number) attributes[0]).longValue()));
+        dest.setClienteCrmId(Long.valueOf(((Number) attributes[1]).longValue()));
+        dest.setSiteId(Long.valueOf(((Number) attributes[2]).longValue()));
+        dest.setSimNumber(String.valueOf(attributes[3]));
         return dest;
     }
 

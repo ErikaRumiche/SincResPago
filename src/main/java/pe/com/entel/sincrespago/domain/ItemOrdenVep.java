@@ -5,72 +5,61 @@ package pe.com.entel.sincrespago.domain;
  */
 public class ItemOrdenVep {
 
-    private long orden_id;
-    private long cliente_id;
-    private long item_id;
-    private long itemdev_id;
-    private String simnumber;
+    private Long ordenId;
+    private Long clienteCrmId;
+    private Long siteId;
+    private String simNumber;
 
     public ItemOrdenVep(){
 
     }
 
-    public ItemOrdenVep(Long orden_id, Long cliente_id,Long item_id, Long itemdev_id, String simnumber){
-        this.orden_id = orden_id.longValue();
-        this.cliente_id = cliente_id.longValue();
-        this.item_id = item_id.longValue();
-        this.itemdev_id = itemdev_id.longValue();
-        this.simnumber = simnumber;
+    public ItemOrdenVep(Long ordenId, Long clienteCrmId, Long siteId, String simNumber) {
+        this.ordenId = ordenId;
+        this.clienteCrmId = clienteCrmId;
+        this.siteId = siteId;
+        this.simNumber = simNumber;
     }
 
-    public long getOrden_id() {
-        return orden_id;
+    public Long getOrdenId() {
+        return ordenId;
     }
 
-    public void setOrden_id(long orden_id) {
-        this.orden_id = orden_id;
+    public void setOrdenId(Long ordenId) {
+        this.ordenId = ordenId;
     }
 
-    public long getCliente_id() {
-        return cliente_id;
+    public Long getClienteCrmId() {
+        return clienteCrmId;
     }
 
-    public void setCliente_id(long cliente_id) {
-        this.cliente_id = cliente_id;
+    public void setClienteCrmId(Long clienteCrmId) {
+        this.clienteCrmId = clienteCrmId;
     }
 
-    public long getItem_id() {
-        return item_id;
+    public Long getSiteId() {
+        return siteId;
     }
 
-    public void setItem_id(long item_id) {
-        this.item_id = item_id;
+    public void setSiteId(Long siteId) {
+        this.siteId = siteId;
     }
 
-    public long getItemdev_id() {
-        return itemdev_id;
+    public String getSimNumber() {
+        return simNumber;
     }
 
-    public void setItemdev_id(long itemdev_id) {
-        this.itemdev_id = itemdev_id;
-    }
-
-    public String getSimnumber() {
-        return simnumber;
-    }
-
-    public void setSimnumber(String simnumber) {
-        this.simnumber = simnumber;
+    public void setSimNumber(String simNumber) {
+        this.simNumber = simNumber;
     }
 
     @Override
     public String toString() {
         return "ItemOrdenVep{" +
-                "orden_id=" + orden_id +
-                ", cliente_id=" + cliente_id +
-                ", item_id=" + item_id +
-                ", itemdevid=" + itemdev_id +
-                ", simnumber='" + simnumber + '\'' +
+                "ordenId=" + ordenId +
+                ", clienteCrmId=" + clienteCrmId +
+                ", siteId=" + siteId +
+                ", simNumber='" + simNumber + '\'' +
                 '}';
     }
 }

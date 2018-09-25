@@ -8,6 +8,7 @@ import pe.com.entel.sincrespago.domain.ItemOrdenVep;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 /**
  * Created by Erika Rumiche on 22/09/2018.
@@ -31,6 +32,7 @@ public class ItemOrdenVepMapper implements StructMapper<ItemOrdenVep> {
     public ItemOrdenVep fromStruct(STRUCT struct) throws SQLException {
         ItemOrdenVep dest = new ItemOrdenVep();
         Object[] attributes = struct.getAttributes();
+        logger.debug("ItemOrdenVepMapper.fromStruct : " + Arrays.toString(attributes));
         dest.setOrden_id(Long.valueOf(((Number) attributes[0]).longValue()));
         dest.setCliente_id(Long.valueOf(((Number) attributes[1]).longValue()));
         dest.setItem_id(Long.valueOf(((Number) attributes[2]).longValue()));

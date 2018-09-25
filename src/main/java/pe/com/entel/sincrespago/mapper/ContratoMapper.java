@@ -37,7 +37,6 @@ public class ContratoMapper implements StructMapper<Contrato> {
         dest.setSimnumber(String.valueOf(attributes[1]));
         dest.setContrato_id(Long.valueOf(((Number) attributes[2]).longValue()));
         dest.setCust_code(String.valueOf(attributes[3]));
-        //logger.debug("ContratoMapper.fromStruct : " + dest.toString());
         return dest;
     }
 }

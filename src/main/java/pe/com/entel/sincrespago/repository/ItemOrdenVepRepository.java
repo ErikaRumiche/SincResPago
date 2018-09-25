@@ -4,8 +4,6 @@ import oracle.jdbc.OracleTypes;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jdbc.support.oracle.SqlReturnStructArray;
-import org.springframework.data.jdbc.support.oracle.SqlStructArrayValue;
-import org.springframework.jdbc.core.SqlInOutParameter;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
@@ -13,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import pe.com.entel.sincrespago.exception.RepositoryException;
 import pe.com.entel.sincrespago.mapper.ItemOrdenVepMapper;
-import pe.com.entel.sincrespago.util.Constants;
+import pe.com.entel.sincrespago.util.Configuration;
 import pe.com.entel.sincrespago.domain.ItemOrdenVep;
 
 import javax.sql.DataSource;
@@ -33,16 +31,19 @@ public class ItemOrdenVepRepository{
     @Autowired
     private DataSource dataSourcePias;
 
+    @Autowired
+    private Configuration configuration;
+
     public List<ItemOrdenVep> obtenerOrdenVep() throws RepositoryException {
 
         logger.debug("*******Inicio ItemOrdenVepRepository obtenerOrdenVep*******");
 
         SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSourcePias);
-        jdbcCall.withSchemaName(Constants.WEBSALES);
-        jdbcCall.withCatalogName(Constants.PKG_MS_SINC_RESP);
-        jdbcCall.withProcedureName("SP_MS_AC_RESP_ORDENCERRADA");
+        jdbcCall.withSchemaName(configuration.getWebsalesSchema());
+        jdbcCall.withCatalogName(configuration.getSincresppagoPackage());
+        jdbcCall.withProcedureName(configuration.getRespOvepcerradaSp());
 
-        jdbcCall.addDeclaredParameter(new SqlOutParameter("AT_ITEM_OVEP", Types.ARRAY, "TT_ITEM_OVEP", new SqlReturnStructArray<ItemOrdenVep>(new ItemOrdenVepMapper())));
+        jdbcCall.addDeclaredParameter(new SqlOutParameter("AT_ITEM_OVEP", Types.ARRAY, "WEBSALES.TT_ITEM_OVEP", new SqlReturnStructArray<ItemOrdenVep>(new ItemOrdenVepMapper())));
         jdbcCall.addDeclaredParameter(new SqlOutParameter("AVCH_MENSAJE", OracleTypes.VARCHAR));
 
         MapSqlParameterSource in = new MapSqlParameterSource();
@@ -63,7 +64,6 @@ public class ItemOrdenVepRepository{
         List<ItemOrdenVep> itemOrdenVepList = new ArrayList<ItemOrdenVep>();
         for(Object object : objects){
             ItemOrdenVep itemOrdenVep = (ItemOrdenVep)object;
-            //logger.debug("itemOrdenVep :" + itemOrdenVep.toString());
             itemOrdenVepList.add(itemOrdenVep);
         }
 

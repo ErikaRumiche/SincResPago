@@ -24,6 +24,12 @@ public class Configuration {
     @Value("${custcodebysim.sp}")
     private String custcodebysimSp;
 
+    @Value("${sitebycustcode.sp}")
+    private String sitebycustcodeSp;
+
+    @Value("${actulizarovep.sp}")
+    private String actualizarovepSp;
+
     public String getWebsalesSchema() {
         return websalesSchema;
     }
@@ -42,5 +48,13 @@ public class Configuration {
 
     public String getCustcodebysimSp() {
         return custcodebysimSp;
+    }
+
+    public String getSitebycustcodeSp() {
+        return sitebycustcodeSp;
+    }
+
+    public String getActualizarovepSp() {
+        return actualizarovepSp;
     }
 }

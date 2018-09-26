@@ -31,6 +31,6 @@ public class CustomBasicDataSource extends BasicDataSource{
 
     @Override
     public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-        return getParentLogger();
+        throw new SQLFeatureNotSupportedException("not supported");
     }
 }

@@ -158,6 +158,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- https://mvnrepository.com/artifact/org.codehaus.mojo/properties-maven-plugin -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
@@ -184,7 +185,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <classpathPrefix>${sincresppagoclasspath.lib}</classpathPrefix>
+                            <classpathPrefix>${classpath.lib}</classpathPrefix>
                             <mainClass>pe.com.entel.sincrespago.main.SincResPagoMain</mainClass>
                         </manifest>
                     </archive>
@@ -192,5 +193,12 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>codelds</id>
+            <url>https://code.lds.org/nexus/content/groups/main-repo</url>
+        </repository>
+    </repositories>
 
 </project>

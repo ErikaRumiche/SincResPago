@@ -8,6 +8,7 @@ import pe.com.entel.sincrespago.domain.ContratoBscs;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 /**
  * Created by Erika Rumiche on 23/09/2018.
@@ -31,7 +32,7 @@ public class ContratoMapper implements StructMapper<ContratoBscs> {
     public ContratoBscs fromStruct(STRUCT struct) throws SQLException {
         ContratoBscs dest = new ContratoBscs();
         Object[] attributes = struct.getAttributes();
-        //logger.debug("ContratoMapper.fromStruct : " + Arrays.toString(attributes));
+        logger.debug("ContratoMapper.fromStruct : " + Arrays.toString(attributes));
         dest.setClienteBscsId(Long.valueOf(((Number) attributes[0]).longValue()));
         dest.setSimNumber(String.valueOf(attributes[1]));
         dest.setContratoId(Long.valueOf(((Number) attributes[2]).longValue()));

@@ -5,7 +5,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jdbc.support.oracle.SqlReturnStructArray;
 import org.springframework.jdbc.core.SqlOutParameter;
+import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
@@ -70,5 +72,40 @@ public class ItemOrdenVepRepository{
         return itemOrdenVepList;
     }
 
+    public void actualizarOrdenVep(long orderId, long siteId) throws RepositoryException {
+
+        logger.debug("*******Inicio actualizarOrdenVep*******");
+
+        try {
+
+            SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSourcePias);
+            jdbcCall.withSchemaName(configuration.getWebsalesSchema());
+            jdbcCall.withCatalogName(configuration.getSincresppagoPackage());
+            jdbcCall.withProcedureName(configuration.getActualizarovepSp());
+
+            jdbcCall.addDeclaredParameter(new SqlParameter("ANUM_ORDEN", OracleTypes.NUMBER));
+            jdbcCall.addDeclaredParameter(new SqlParameter("ANUM_SITE", OracleTypes.NUMBER));
+            jdbcCall.addDeclaredParameter(new SqlOutParameter("AVCH_MENSAJE", OracleTypes.VARCHAR));
+
+            SqlParameterSource in = new MapSqlParameterSource()
+                    .addValue("ANUM_ORDEN", orderId)
+                    .addValue("ANUM_SITE", siteId);
+
+            Map<String, Object> result = jdbcCall.execute(in);
+            logger.info("Se ejecuto procedure de actualización");
+            String message = (String) result.get("AVCH_MENSAJE");
+
+            if (message != null) {
+                throw new RepositoryException(message);
+            }
+
+        } catch (Exception e) {
+            throw new RepositoryException("No se pudo actualizar el site de la orden vep", e);
+        } finally {
+            logger.debug("*******Fin actualizarOrdenVep*******");
+        }
+
+
+    }
 
 }

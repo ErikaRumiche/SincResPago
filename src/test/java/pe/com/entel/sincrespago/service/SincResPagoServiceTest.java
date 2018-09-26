@@ -18,7 +18,7 @@ public class SincResPagoServiceTest {
 
     @Test
     public void sincronizarInfoTest() throws Exception {
-        sincResPagoService.sincronizarInfo();
+        sincResPagoService.sincronizarResPago();
 
     }
 }

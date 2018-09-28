@@ -101,9 +101,21 @@ public class SincResPagoService {
                 if (custcode != null) {
                     SiteVep siteVep = buscarSiteId(custcode);
                     if(siteVep != null) {
-                        itemOrdenVepRepository.actualizarOrdenVep(orden.getOrdenId(), siteVep.getSiteId());
-                        itemOrdenVepRepository.insertarTemporal(orden.getOrdenId(), orden.getSiteOvepId(), orden.getClienteCrmId(),
-                                custcode, siteVep.getSiteId(), siteVep.getEstado());
+                        if(orden.getSiteOvepId().longValue()!= siteVep.getSiteId().longValue()) {
+                            itemOrdenVepRepository.actualizarOrdenVep(orden.getOrdenId(), siteVep.getSiteId());
+                            itemOrdenVepRepository.insertarTemporal(orden.getOrdenId(), orden.getSiteOvepId(), orden.getClienteCrmId(),
+                                    custcode, siteVep.getSiteId(), siteVep.getEstado());
+
+                            logger.debug("Resultado{" +
+                                    "siteId=" + siteVep.getSiteId().longValue() +
+                                    ", siteCustCode='" + siteVep.getCustCode() + '\'' +
+                                    ", siteClienteCrmId=" + siteVep.getClienteCrmId().longValue() +
+                                    ", siteEstado='" + siteVep.getEstado() + '\'' +
+                                    ", orderId=" + orden.getOrdenId() +
+                                    ", orderSiteId=" + orden.getSiteOvepId() +
+                                    ", orderClienteCrmId=" + orden.getClienteCrmId() +
+                                    '}');
+                        }
                     }
                     break simnumbers;
                 } else {
@@ -113,50 +125,6 @@ public class SincResPagoService {
 
         }
     }
-
-    /*
-        for(SiteVep siteVep:siteVepList){
-            for(ContratoBscs contratoBscs:contratoBscsList){
-                if(siteVep.getCustCode().equals(contratoBscs.getCustCode())){
-                    for(ItemOrdenVep itemOrdenVep:itemOrdenVepList){
-                        if(itemOrdenVep.getSimNumber().equals(contratoBscs.getSimNumber())){
-                            long siteId = siteVep.getSiteId().longValue();
-                            long orderId = itemOrdenVep.getOrdenId().longValue();
-
-                            if(siteVep.getSiteId().longValue() != itemOrdenVep.getSiteId().longValue()) {
-                                if (siteVep.getClienteCrmId().longValue() == itemOrdenVep.getClienteCrmId().longValue()) {
-                                    orderIdList.add(orderId);
-
-                                    if (itemOrdenVep.getOrdenId().longValue() != orderIdList.get(count)){
-                                       // orderIdList.add(orderId);
-                                        logger.debug("Resultado{" +
-                                                "siteId=" + siteVep.getSiteId().longValue() +
-                                                ", siteCustCode='" + siteVep.getCustCode() + '\'' +
-                                                ", siteClienteCrmId=" + siteVep.getClienteCrmId().longValue() +
-                                                ", siteEstado='" + siteVep.getEstado() + '\'' +
-                                                ", orderId=" + itemOrdenVep.getOrdenId().longValue() +
-                                                ", orderSiteId=" + itemOrdenVep.getSiteId().longValue() +
-                                                ", orderClienteCrmId=" + itemOrdenVep.getClienteCrmId().longValue() +
-                                                '}');
-
-                                        itemOrdenVepRepository.actualizarOrdenVep(orderId, siteId);
-                                        itemOrdenVepRepository.insertarTemporal(orderId, itemOrdenVep.getSiteId().longValue(),
-                                                itemOrdenVep.getClienteCrmId().longValue(), siteVep.getCustCode(),
-                                                siteId,siteVep.getEstado());
-
-                                        count++;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        logger.info("Cantidad de Ordenes VEP para actualizar: " + count);
-    }
-    */
 
     public void truncateTemporales() throws RepositoryException{
         itemOrdenVepRepository.truncateTemporal();

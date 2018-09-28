@@ -28,7 +28,7 @@
         <property name="locations">
             <list>
                 <value>file:${sincrespago.dir.config}/jdbc.properties</value>
-                <value>file:${sincrespago.dir.config}/sincrespago.properties</value>
+                <value>classpath:sincrespago.properties</value>
             </list>
         </property>
     </bean>

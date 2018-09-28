@@ -30,6 +30,12 @@ public class Configuration {
     @Value("${actulizarovep.sp}")
     private String actualizarovepSp;
 
+    @Value("${instmp.sp}")
+    private String instmpSp;
+
+    @Value("${truncatetmp.sp}")
+    private String truncatetmpSp;
+
     public String getWebsalesSchema() {
         return websalesSchema;
     }
@@ -56,5 +62,13 @@ public class Configuration {
 
     public String getActualizarovepSp() {
         return actualizarovepSp;
+    }
+
+    public String getInstmpSp() {
+        return instmpSp;
+    }
+
+    public String getTruncatetmpSp() {
+        return truncatetmpSp;
     }
 }

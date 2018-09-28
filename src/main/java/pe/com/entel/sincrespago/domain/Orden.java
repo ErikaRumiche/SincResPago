@@ -50,5 +50,13 @@ public class Orden {
         return simnumberList;
     }
 
-
+    @Override
+    public String toString() {
+        return "Orden{" +
+                "ordenId=" + ordenId +
+                ", clienteCrmId=" + clienteCrmId +
+                ", siteOvepId=" + siteOvepId +
+                ", simnumberList=" + simnumberList +
+                '}';
+    }
 }

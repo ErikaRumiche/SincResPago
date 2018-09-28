@@ -94,6 +94,7 @@ public class SincResPagoService {
     public void actualizarOvepInsTmp()  throws RepositoryException {
 
         for (Orden orden : ordenList) {
+            logger.debug(orden.toString());
             simnumbers:
             for (String simnumber : orden.getSimnumberList()) {
                 String custcode = buscarCustCode(simnumber);
@@ -101,6 +102,7 @@ public class SincResPagoService {
                 if (custcode != null) {
                     SiteVep siteVep = buscarSiteId(custcode);
                     if(siteVep != null) {
+                        logger.debug("Toca Site : " + siteVep.toString());
                         itemOrdenVepRepository.actualizarOrdenVep(orden.getOrdenId(), siteVep.getSiteId());
                         itemOrdenVepRepository.insertarTemporal(orden.getOrdenId(), orden.getSiteOvepId(), orden.getClienteCrmId(),
                                 custcode, siteVep.getSiteId(), siteVep.getEstado());

@@ -9,6 +9,7 @@ public class ItemOrdenVep {
     private Long clienteCrmId;
     private Long siteId;
     private String simNumber;
+    private Long ovepId;
 
     public ItemOrdenVep(){
 
@@ -53,6 +54,15 @@ public class ItemOrdenVep {
         this.simNumber = simNumber;
     }
 
+
+    public Long getOvepId() {
+        return ovepId;
+    }
+
+    public void setOvepId(Long ovepId) {
+        this.ovepId = ovepId;
+    }
+
     @Override
     public String toString() {
         return "ItemOrdenVep{" +
@@ -60,6 +70,7 @@ public class ItemOrdenVep {
                 ", clienteCrmId=" + clienteCrmId +
                 ", siteId=" + siteId +
                 ", simNumber='" + simNumber + '\'' +
+                ", ovepId=" + ovepId +
                 '}';
     }
 }

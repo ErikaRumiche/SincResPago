@@ -3,10 +3,7 @@ package pe.com.entel.sincrespago.service;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.com.entel.sincrespago.domain.ContratoBscs;
-import pe.com.entel.sincrespago.domain.ItemOrdenVep;
-import pe.com.entel.sincrespago.domain.Orden;
-import pe.com.entel.sincrespago.domain.SiteVep;
+import pe.com.entel.sincrespago.domain.*;
 import pe.com.entel.sincrespago.exception.RepositoryException;
 import pe.com.entel.sincrespago.repository.ContratoRepository;
 import pe.com.entel.sincrespago.repository.ItemOrdenVepRepository;
@@ -40,8 +37,7 @@ public class SincResPagoService {
     private List<Orden> ordenList = new ArrayList<Orden>();
 
     public void sincronizarResPago()  {
-        logger.info("Se inicia carga");
-
+        logger.info("************ Se inicia sincronizacion ************");
         try{
 
             truncateTemporales();
@@ -50,6 +46,7 @@ public class SincResPagoService {
             obtenerInfoSite();
             llenarEstructura();
             actualizarOvepInsTmp();
+            logger.info("************Se finaliza sincronizacion ************");
 
         }catch (RepositoryException e){
             logger.error("Error al invocar procedure ",e);
@@ -92,8 +89,12 @@ public class SincResPagoService {
     }
 
     public void actualizarOvepInsTmp()  throws RepositoryException {
-
+        long inicio = System.currentTimeMillis();
+        long fin= 0;
+        int contador = 0;
+        logger.info("Se van a procesar "+ ordenList.size() + " ordenes");
         for (Orden orden : ordenList) {
+
             simnumbers:
             for (String simnumber : orden.getSimnumberList()) {
                 String custcode = buscarCustCode(simnumber);
@@ -102,32 +103,37 @@ public class SincResPagoService {
                     SiteVep siteVep = buscarSiteId(custcode);
                     if(siteVep != null) {
                         if(orden.getSiteOvepId().longValue()!= siteVep.getSiteId().longValue()) {
+                            logger.debug(orden.toString());
+                            logger.debug("Se va actualizar: "+ orden.getOrdenId()+ " - " + siteVep.getSiteId());
                             itemOrdenVepRepository.actualizarOrdenVep(orden.getOrdenId(), siteVep.getSiteId());
-                            itemOrdenVepRepository.insertarTemporal(orden.getOrdenId(), orden.getSiteOvepId(), orden.getClienteCrmId(),
-                                    custcode, siteVep.getSiteId(), siteVep.getEstado());
-
-                            logger.debug("Resultado{" +
-                                    "siteId=" + siteVep.getSiteId().longValue() +
-                                    ", siteCustCode='" + siteVep.getCustCode() + '\'' +
-                                    ", siteClienteCrmId=" + siteVep.getClienteCrmId().longValue() +
-                                    ", siteEstado='" + siteVep.getEstado() + '\'' +
-                                    ", orderId=" + orden.getOrdenId() +
-                                    ", orderSiteId=" + orden.getSiteOvepId() +
-                                    ", orderClienteCrmId=" + orden.getClienteCrmId() +
-                                    '}');
+                            TmpSincResPago tmpSincResPago = new TmpSincResPago();
+                            tmpSincResPago.setOrderId(orden.getOrdenId());
+                            tmpSincResPago.setOrderSiteId(orden.getSiteOvepId());
+                            tmpSincResPago.setClienteCrmId(orden.getClienteCrmId());
+                            tmpSincResPago.setOvepId(orden.getOvepId());
+                            tmpSincResPago.setCustcode(custcode);
+                            tmpSincResPago.setSiteId(siteVep.getSiteId());
+                            tmpSincResPago.setSiteEstado(siteVep.getEstado());
+                            logger.debug("Se va insertar temporal: " + tmpSincResPago.toString());
+                            itemOrdenVepRepository.insertarTemporal(tmpSincResPago);
+                            contador++;
                         }
+
                     }
                     break simnumbers;
                 } else {
                     continue simnumbers;
                 }
             }
-
         }
+        fin = System.currentTimeMillis();
+        logger.info("Se actualizaron "+ contador + " ordenes, tiempo de ejecucion "+ (fin-inicio)+ " ms");
     }
 
     public void truncateTemporales() throws RepositoryException{
+
         itemOrdenVepRepository.truncateTemporal();
+
     }
 
     public String buscarCustCode (String simnumber) throws RepositoryException{
@@ -137,11 +143,11 @@ public class SincResPagoService {
                 return contratoBscs.getCustCode();
             }
         }
-
         return null;
     }
 
     public SiteVep buscarSiteId (String custcode) throws RepositoryException{
+
         for(SiteVep siteVep:siteVepList) {
             if (siteVep.getCustCode().equals(custcode)) {
                  return siteVep;
@@ -152,16 +158,15 @@ public class SincResPagoService {
 
     public void llenarEstructura() throws RepositoryException{
         for(ItemOrdenVep itemOrdenVep:itemOrdenVepList) {
-            Orden orden = buscarOrden(itemOrdenVep.getOrdenId());
+            Orden orden = buscarOrden(itemOrdenVep.getOrdenId().longValue());
 
             if(orden == null){
-                orden = new Orden(itemOrdenVep.getOrdenId(),itemOrdenVep.getClienteCrmId(),itemOrdenVep.getSiteId());
+                orden = new Orden(itemOrdenVep.getOrdenId().longValue(),itemOrdenVep.getClienteCrmId().longValue(),itemOrdenVep.getSiteId().longValue(),itemOrdenVep.getOvepId().longValue());
                 orden.getSimnumberList().add(itemOrdenVep.getSimNumber());
                 ordenList.add(orden);
             }else{
                 orden.getSimnumberList().add(itemOrdenVep.getSimNumber());
             }
-
         }
     }
 
@@ -171,7 +176,6 @@ public class SincResPagoService {
                 return orden;
             }
         }
-
         return null;
     }
 }

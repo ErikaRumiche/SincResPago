@@ -31,7 +31,7 @@ public class SiteVepMapper implements StructMapper<SiteVep>{
     public SiteVep fromStruct(STRUCT struct) throws SQLException {
         SiteVep siteVep  = new SiteVep();
         Object[] attributes = struct.getAttributes();
-        logger.debug("SiteVepMapper.fromStruct : " + Arrays.toString(attributes));
+        //logger.debug("SiteVepMapper.fromStruct : " + Arrays.toString(attributes));
         siteVep.setSiteId(Long.valueOf(((Number) attributes[0]).longValue()));
         siteVep.setClienteCrmId(Long.valueOf(((Number) attributes[1]).longValue()));
         siteVep.setCustCode(String.valueOf(attributes[2]));

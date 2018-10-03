@@ -11,12 +11,14 @@ public class Orden {
     private Long ordenId;
     private Long clienteCrmId;
     private Long siteOvepId;
+    private Long ovepId;
     private List<String> simnumberList;
 
-    public Orden(Long ordenId, Long clienteCrmId, Long siteOvepId) {
+    public Orden(Long ordenId, Long clienteCrmId, Long siteOvepId, Long ovepId) {
         this.ordenId = ordenId;
         this.clienteCrmId = clienteCrmId;
         this.siteOvepId = siteOvepId;
+        this.ovepId = ovepId;
     }
 
     public Long getOrdenId() {
@@ -50,5 +52,22 @@ public class Orden {
         return simnumberList;
     }
 
+    public Long getOvepId() {
+        return ovepId;
+    }
 
+    public void setOvepId(Long ovepId) {
+        this.ovepId = ovepId;
+    }
+
+    @Override
+    public String toString() {
+        return "Orden{" +
+                "ordenId=" + ordenId +
+                ", clienteCrmId=" + clienteCrmId +
+                ", siteOvepId=" + siteOvepId +
+                ", ovepId=" + ovepId +
+                ", simnumberList=" + simnumberList +
+                '}';
+    }
 }

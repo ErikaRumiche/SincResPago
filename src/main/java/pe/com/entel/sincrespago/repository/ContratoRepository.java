@@ -55,14 +55,11 @@ public class ContratoRepository {
         logger.debug("Se ejecuto procedure");
         String message = (String) result.get("AVCH_MENSAJE");
 
-        logger.debug("message : " + message);
-        
         if(message != null){
             throw new RepositoryException(message);
         }
 
         Object[] objects= (Object[])result.get("AT_CONTRATO_OVEP");
-        logger.debug("Tamaño AT_CONTRATO_OVEP: " + objects.length);
         List<ContratoBscs> contratoBscsList = new ArrayList<ContratoBscs>();
         for(Object object : objects){
             ContratoBscs contratoBscs = (ContratoBscs)object;

@@ -51,17 +51,13 @@ public class SiteVepRepository {
         in.addValue("AT_CUSTCODE_OVEP", new SqlArrayValue(custcodeArray));
 
         Map<String, Object> result = jdbcCall.execute(in);
-        logger.debug("Se ejecuto procedure");
         String message = (String) result.get("AVCH_MENSAJE");
-
-        logger.debug("message : " + message);
 
         if(message != null){
             throw new RepositoryException(message);
         }
 
         Object[] objects= (Object[])result.get("AT_SITE_OVEP");
-        logger.debug("Tamaño AT_SITE_OVEP: " + objects.length);
         List<SiteVep> sitesList = new ArrayList<SiteVep>();
         for(Object object : objects){
             SiteVep site = (SiteVep)object;

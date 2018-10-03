@@ -25,6 +25,7 @@ public class ItemOrdenVepMapper implements StructMapper<ItemOrdenVep> {
         values[1] = source.getClienteCrmId();
         values[2] = source.getSiteId();
         values[3] = source.getSimNumber();
+        values[4] = source.getOvepId();
         return new STRUCT(descriptor, conn, values);
     }
 
@@ -36,6 +37,7 @@ public class ItemOrdenVepMapper implements StructMapper<ItemOrdenVep> {
         dest.setClienteCrmId(Long.valueOf(((Number) attributes[1]).longValue()));
         dest.setSiteId(Long.valueOf(((Number) attributes[2]).longValue()));
         dest.setSimNumber(String.valueOf(attributes[3]));
+        dest.setOvepId(Long.valueOf(((Number) attributes[4]).longValue()));
         return dest;
     }
 

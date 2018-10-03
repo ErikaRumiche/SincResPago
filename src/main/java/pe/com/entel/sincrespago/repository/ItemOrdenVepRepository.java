@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
+import pe.com.entel.sincrespago.domain.TmpSincResPago;
 import pe.com.entel.sincrespago.exception.RepositoryException;
 import pe.com.entel.sincrespago.mapper.ItemOrdenVepMapper;
 import pe.com.entel.sincrespago.util.Configuration;
@@ -38,8 +39,6 @@ public class ItemOrdenVepRepository{
 
     public List<ItemOrdenVep> obtenerOrdenVep() throws RepositoryException {
 
-        logger.debug("*******Inicio ItemOrdenVepRepository obtenerOrdenVep*******");
-
         SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSourcePias);
         jdbcCall.withSchemaName(configuration.getWebsalesSchema());
         jdbcCall.withCatalogName(configuration.getSincresppagoPackage());
@@ -50,11 +49,7 @@ public class ItemOrdenVepRepository{
 
         MapSqlParameterSource in = new MapSqlParameterSource();
         Map<String, Object> result = jdbcCall.execute(in);
-        logger.debug("Se ejecuto procedure");
-        logger.debug(result.toString());
         String message = (String) result.get("AVCH_MENSAJE");
-
-        logger.debug("message : " + message);
 
         if(message != null){
             throw new RepositoryException(message);
@@ -62,7 +57,6 @@ public class ItemOrdenVepRepository{
 
         Object[] objects= (Object[])result.get("AT_ITEM_OVEP");
 
-        logger.debug("Tamaño AT_ITEM_OVEP : " + objects.length);
         List<ItemOrdenVep> itemOrdenVepList = new ArrayList<ItemOrdenVep>();
         for(Object object : objects){
             ItemOrdenVep itemOrdenVep = (ItemOrdenVep)object;
@@ -73,8 +67,6 @@ public class ItemOrdenVepRepository{
     }
 
     public void actualizarOrdenVep(long orderId, long siteId) throws RepositoryException {
-
-        logger.debug("*******Inicio actualizarOrdenVep*******");
 
         try {
 
@@ -100,15 +92,10 @@ public class ItemOrdenVepRepository{
 
         } catch (Exception e) {
             throw new RepositoryException("No se pudo actualizar el site de la orden vep", e);
-        } finally {
-            logger.debug("*******Fin actualizarOrdenVep*******");
         }
     }
 
-    public void insertarTemporal(long orderId,long siteOvepId,long clienteCrmId,String custCode,
-                                 long siteId, String estado) throws RepositoryException {
-
-        logger.debug("*******Inicio insertarTemporal*******");
+    public void insertarTemporal(TmpSincResPago tmpSincResPago) throws RepositoryException {
 
         try {
 
@@ -120,18 +107,20 @@ public class ItemOrdenVepRepository{
             jdbcCall.addDeclaredParameter(new SqlParameter("ANUM_ORDEN", OracleTypes.NUMBER));
             jdbcCall.addDeclaredParameter(new SqlParameter("ANUM_ORDERSITEID", OracleTypes.NUMBER));
             jdbcCall.addDeclaredParameter(new SqlParameter("ANUM_ORDERCLIENTECRMID", OracleTypes.NUMBER));
+            jdbcCall.addDeclaredParameter(new SqlParameter("ANUM_OVEPID", OracleTypes.NUMBER));
             jdbcCall.addDeclaredParameter(new SqlParameter("AVCH_CUSTCODE", OracleTypes.VARCHAR));
             jdbcCall.addDeclaredParameter(new SqlParameter("ANUM_SITEID", OracleTypes.NUMBER));
             jdbcCall.addDeclaredParameter(new SqlParameter("AVCH_SITEESTADO", OracleTypes.VARCHAR));
             jdbcCall.addDeclaredParameter(new SqlOutParameter("AVCH_MENSAJE", OracleTypes.VARCHAR));
 
             SqlParameterSource in = new MapSqlParameterSource()
-                    .addValue("ANUM_ORDEN", orderId)
-                    .addValue("ANUM_ORDERSITEID", siteOvepId)
-                    .addValue("ANUM_ORDERCLIENTECRMID", clienteCrmId)
-                    .addValue("AVCH_CUSTCODE", custCode)
-                    .addValue("ANUM_SITEID", siteId)
-                    .addValue("AVCH_SITEESTADO", estado);
+                    .addValue("ANUM_ORDEN", tmpSincResPago.getOrderId())
+                    .addValue("ANUM_ORDERSITEID", tmpSincResPago.getOrderSiteId())
+                    .addValue("ANUM_ORDERCLIENTECRMID", tmpSincResPago.getClienteCrmId())
+                    .addValue("ANUM_OVEPID", tmpSincResPago.getOvepId())
+                    .addValue("AVCH_CUSTCODE", tmpSincResPago.getCustcode())
+                    .addValue("ANUM_SITEID", tmpSincResPago.getSiteId())
+                    .addValue("AVCH_SITEESTADO", tmpSincResPago.getSiteEstado());
 
             Map<String, Object> result = jdbcCall.execute(in);
             String message = (String) result.get("AVCH_MENSAJE");
@@ -142,14 +131,10 @@ public class ItemOrdenVepRepository{
 
         } catch (Exception e) {
             throw new RepositoryException("No se pudo insertar ordenes vep actualizadas", e);
-        } finally {
-            logger.debug("*******Fin insertarTemporal*******");
         }
     }
 
     public void truncateTemporal() throws RepositoryException {
-
-        logger.debug("*******Inicio truncateTemporal*******");
 
         try {
 
@@ -163,7 +148,6 @@ public class ItemOrdenVepRepository{
             SqlParameterSource in = new MapSqlParameterSource();
 
             Map<String, Object> result = jdbcCall.execute(in);
-            logger.debug("Se ejecuto truncate");
             String message = (String) result.get("AVCH_MENSAJE");
 
             if (message != null) {
@@ -172,8 +156,6 @@ public class ItemOrdenVepRepository{
 
         } catch (Exception e) {
             throw new RepositoryException("No se pudo realizar el truncate de la tabla temporal", e);
-        } finally {
-            logger.debug("*******Fin truncateTemporal*******");
         }
     }
 

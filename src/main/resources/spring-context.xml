@@ -33,29 +33,29 @@
         </property>
     </bean>
 
-    <!--<bean id="dataSourcePias" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
+    <bean id="dataSourcePias" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
         <property name="URL" value="${jdbc.pias.url}"/>
         <property name="user" value="${jdbc.pias.username}"/>
         <property name="password" value="${jdbc.pias.password}"/>
-    </bean>-->
-     <bean id="dataSourcePias" class="pe.com.entel.sincrespago.util.CustomBasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${jdbc.pias.driverClassName}"/>
-        <property name="url" value="${jdbc.pias.url}"/>
-        <property name="username" value="${jdbc.pias.username}"/>
-        <property name="password" value="${jdbc.pias.password}"/>
-        <property name="initialSize" value="${jdbc.pias.initialSize}"/>
-        <property name="maxActive" value="${jdbc.pias.maxActive}"/>
-        <property name="minIdle" value="${jdbc.pias.minIdle}"/>
-        <property name="accessToUnderlyingConnectionAllowed" value="${jdbc.pias.accessToUnderlyingConnectionAllowed}" />
     </bean>
 
-    <!--<bean id="dataSourcePbscs" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
-        <property name="URL" value="${jdbc.pbscs.url}"/>
-        <property name="user" value="${jdbc.pbscs.username}"/>
-        <property name="password" value="${jdbc.pbscs.password}"/>
-    </bean>-->
+    <!--<bean id="dataSourcePias" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+       <property name="driverClassName" value="${jdbc.pias.driverClassName}"/>
+       <property name="url" value="${jdbc.pias.url}"/>
+       <property name="username" value="${jdbc.pias.username}"/>
+       <property name="password" value="${jdbc.pias.password}"/>
+       <property name="initialSize" value="${jdbc.pias.initialSize}"/>
+       <property name="maxActive" value="${jdbc.pias.maxActive}"/>
+       <property name="minIdle" value="${jdbc.pias.minIdle}"/>
+   </bean>-->
 
-    <bean id="dataSourcePbscs" class="pe.com.entel.sincrespago.util.CustomBasicDataSource" destroy-method="close">
+   <bean id="dataSourcePbscs" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
+       <property name="URL" value="${jdbc.pbscs.url}"/>
+       <property name="user" value="${jdbc.pbscs.username}"/>
+       <property name="password" value="${jdbc.pbscs.password}"/>
+   </bean>
+
+    <!--<bean id="dataSourcePbscs" class="pe.com.entel.sincrespago.util.CustomBasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${jdbc.pbscs.driverClassName}"/>
         <property name="url" value="${jdbc.pbscs.url}"/>
         <property name="username" value="${jdbc.pbscs.username}"/>
@@ -63,6 +63,5 @@
         <property name="initialSize" value="${jdbc.pbscs.initialSize}"/>
         <property name="maxActive" value="${jdbc.pbscs.maxActive}"/>
         <property name="minIdle" value="${jdbc.pbscs.minIdle}"/>
-        <property name="accessToUnderlyingConnectionAllowed" value="${jdbc.pbscs.accessToUnderlyingConnectionAllowed}" />
-    </bean>
+    </bean>-->
 </beans>

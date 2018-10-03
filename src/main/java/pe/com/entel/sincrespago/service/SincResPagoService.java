@@ -57,14 +57,18 @@ public class SincResPagoService {
     }
 
     public void obtenerInfoOrdenVep() throws RepositoryException{
+        long inicio = System.currentTimeMillis();
+        long fin= 0;
 
         logger.info("Se obtiene informacion de la orden VEP");
         itemOrdenVepList = itemOrdenVepRepository.obtenerOrdenVep();
-        logger.info("Se obtuvo "+itemOrdenVepList.size()+ " items para procesar");
-
+        fin = System.currentTimeMillis();
+        logger.info("Se obtuvo : " + itemOrdenVepList.size() + " items para procesar, tiempo de ejecucion " + (fin - inicio) + " ms");
     }
 
     public void obtenerInfoBscs() throws RepositoryException{
+        long inicio = System.currentTimeMillis();
+        long fin= 0;
 
         List<String> simnumberList = new ArrayList<String>();
         for(ItemOrdenVep itemOrdenVep: itemOrdenVepList){
@@ -72,11 +76,13 @@ public class SincResPagoService {
         }
         logger.info("Se obtiene informacion de contratos a partir del simnumber de la orden");
         contratoBscsList = contratoRepository.obtenerContrato(simnumberList);
-        logger.info("Se obtuvieron  ContratoBSCS: " + contratoBscsList.size() + " para procesar");
-
+        fin = System.currentTimeMillis();
+        logger.info("Se obtuvo : " + contratoBscsList.size() + " contratos en BSCS para procesar, tiempo de ejecucion " + (fin - inicio) + " ms");
     }
 
     public void obtenerInfoSite() throws RepositoryException{
+        long inicio = System.currentTimeMillis();
+        long fin= 0;
 
         List<String> custCodeList = new ArrayList<String>();
         for(ContratoBscs contratoBscs: contratoBscsList){
@@ -84,7 +90,9 @@ public class SincResPagoService {
         }
         logger.info("Se obtiene informacion de site a partir de los custcode para asociar a la orden");
         siteVepList = siteVepRepository.obtenerSiteVep(custCodeList);
-        logger.info("Se obtuvieron Site: " + siteVepList.size() + " para procesar");
+        fin = System.currentTimeMillis();
+        logger.info("Se obtuvo : " + siteVepList.size() + " sites para procesar, tiempo de ejecucion " + (fin - inicio) + " ms");
+
 
     }
 
@@ -131,9 +139,7 @@ public class SincResPagoService {
     }
 
     public void truncateTemporales() throws RepositoryException{
-
         itemOrdenVepRepository.truncateTemporal();
-
     }
 
     public String buscarCustCode (String simnumber) throws RepositoryException{
@@ -147,7 +153,6 @@ public class SincResPagoService {
     }
 
     public SiteVep buscarSiteId (String custcode) throws RepositoryException{
-
         for(SiteVep siteVep:siteVepList) {
             if (siteVep.getCustCode().equals(custcode)) {
                  return siteVep;
@@ -157,6 +162,9 @@ public class SincResPagoService {
     }
 
     public void llenarEstructura() throws RepositoryException{
+        long inicio = System.currentTimeMillis();
+        long fin= 0;
+
         for(ItemOrdenVep itemOrdenVep:itemOrdenVepList) {
             Orden orden = buscarOrden(itemOrdenVep.getOrdenId().longValue());
 
@@ -168,9 +176,13 @@ public class SincResPagoService {
                 orden.getSimnumberList().add(itemOrdenVep.getSimNumber());
             }
         }
+
+        fin = System.currentTimeMillis();
+        logger.info("Llenar estructura, tiempo de ejecucion " + (fin - inicio) + " ms");
     }
 
     public Orden buscarOrden (long ordenId) throws RepositoryException{
+
         for(Orden orden:ordenList){
             if(orden.getOrdenId().longValue() == ordenId){
                 return orden;
